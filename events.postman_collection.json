@@ -1,0 +1,108 @@
+{
+  "info": {
+    "name": "events - Microservicio de reservas de eventos",
+    "description": "Coleccion para el deber de autenticacion con AWS Cognito. Los endpoints publicos no llevan token, los privados usan Bearer Token.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8080" },
+    { "key": "access_token", "value": "PEGA_AQUI_TU_ACCESS_TOKEN" }
+  ],
+  "item": [
+    {
+      "name": "01 - PUBLICO - GET listar eventos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{base_url}}/api/events", "host": ["{{base_url}}"], "path": ["api", "events"] }
+      }
+    },
+    {
+      "name": "02 - PUBLICO - GET detalle de evento",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{base_url}}/api/events/1", "host": ["{{base_url}}"], "path": ["api", "events", "1"] }
+      }
+    },
+    {
+      "name": "03 - PRIVADO - POST crear evento",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{access_token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Rock Fest\",\n  \"venue\": \"Estadio Olimpico\",\n  \"totalTickets\": 100\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/events", "host": ["{{base_url}}"], "path": ["api", "events"] }
+      }
+    },
+    {
+      "name": "04 - PRIVADO - POST crear asistente",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{access_token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Ana Perez\",\n  \"email\": \"ana@mail.com\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/attendees", "host": ["{{base_url}}"], "path": ["api", "attendees"] }
+      }
+    },
+    {
+      "name": "05 - PRIVADO SIN TOKEN - POST crear reserva (debe dar 401)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"attendeeId\": 1,\n  \"eventId\": 1\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/reservations", "host": ["{{base_url}}"], "path": ["api", "reservations"] }
+      }
+    },
+    {
+      "name": "06 - PRIVADO CON TOKEN - POST crear reserva (debe dar 201)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{access_token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"attendeeId\": 1,\n  \"eventId\": 1\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/reservations", "host": ["{{base_url}}"], "path": ["api", "reservations"] }
+      }
+    },
+    {
+      "name": "07 - PRIVADO - PUT cancelar reserva",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{access_token}}" }
+        ],
+        "url": { "raw": "{{base_url}}/api/reservations/1/cancel", "host": ["{{base_url}}"], "path": ["api", "reservations", "1", "cancel"] }
+      }
+    },
+    {
+      "name": "08 - PRIVADO - GET listar reservas",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{access_token}}" }
+        ],
+        "url": { "raw": "{{base_url}}/api/reservations", "host": ["{{base_url}}"], "path": ["api", "reservations"] }
+      }
+    }
+  ]
+}
